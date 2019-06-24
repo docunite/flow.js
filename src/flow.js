@@ -400,9 +400,13 @@
           // event listener is executed two times
           // first one - original mouse click event
           // second - input.click(), input is inside domNode
-          domNode.addEventListener('click', function() {
+          var listener = function() {
             input.click();
-          }, false);
+          };
+          domNode.addEventListener('click', listener, false);
+          domNode.cleanEvents = function() {
+            domNode.removeEventListener('click', listener);
+          };
         }
         if (!this.opts.singleFile && !singleFile) {
           input.setAttribute('multiple', 'multiple');
@@ -421,6 +425,21 @@
             e.target.value = '';
        	  }
         }, false);
+      }, this);
+    },
+
+    /**
+     * Un-assign browse event from DOM nodes
+     * @function
+     * @param domNodes
+     */
+    unAssignBrowse: function (domNodes) {
+      if (typeof domNodes.length === 'undefined') {
+        domNodes = [domNodes];
+      }
+      each(domNodes, function (domNode) {
+        domNode.cleanEvents();
+        each(domNode.getElementsByTagName('input'), (input) => domNode.removeChild(input));
       }, this);
     },
 
