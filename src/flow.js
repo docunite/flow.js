@@ -439,7 +439,7 @@
       }
       each(domNodes, function (domNode) {
         domNode.cleanEvents();
-        each(domNode.getElementsByTagName('input'), (input) => domNode.removeChild(input));
+        each(domNode.getElementsByTagName('input'), function(input) {domNode.removeChild(input)});
       }, this);
     },
 
